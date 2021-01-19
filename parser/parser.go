@@ -3,12 +3,11 @@ package parser
 import (
 	"bufio"
 	"fmt"
-	"ngxParse"
 	"os"
 
 	"github.com/starjun/ngxParse"
 	"github.com/starjun/ngxParse/parser/token"
-	// gonginx "zjdemo/ngxParse"
+	// "zjdemo/ngxParse"
 	// "zjdemo/ngxParse/parser/token"
 )
 

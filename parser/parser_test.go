@@ -3,10 +3,10 @@ package parser
 import (
 	"testing"
 
-	gonginx "github.com/starjun/ngxParse"
+	"github.com/starjun/ngxParse"
 	"github.com/starjun/ngxParse/parser/token"
 
-	// gonginx "zjdemo/ngxParse"
+	// "zjdemo/ngxParse"
 	// "zjdemo/ngxParse/parser/token"
 
 	"gotest.tools/v3/assert"
@@ -30,7 +30,7 @@ func TestParser_CurrFollow(t *testing.T) {
 //	`
 //	p := NewStringParser(conf)
 //	c := p.Parse()
-//	_, ok := c.Directives[0].(gonginx.IncludeDirective) //we expect the first statement to be an include
+//	_, ok := c.Directives[0].(ngxParse.IncludeDirective) //we expect the first statement to be an include
 //	assert.Assert(t, ok)
 //}
 
@@ -139,7 +139,7 @@ func TestParser_Location(t *testing.T) {
 		} 
 	`)).Parse()
 
-	_, ok := c.Directives[0].(*gonginx.Location)
+	_, ok := c.Directives[0].(*ngxParse.Location)
 	assert.Assert(t, ok, "expecting a location as first statement")
 }
 
@@ -151,7 +151,7 @@ func TestParser_VariableAsParameter(t *testing.T) {
 			}
 	`)).Parse()
 
-	d, ok := c.Directives[0].(*gonginx.Directive)
+	d, ok := c.Directives[0].(*ngxParse.Directive)
 	assert.Assert(t, ok, "expecting a directive(http) as first statement")
 	assert.Equal(t, d.Name, "map", "first directive needs to be ")
 	assert.Equal(t, len(d.Parameters), 2, "map must have 2 parameters here")
