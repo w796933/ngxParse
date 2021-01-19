@@ -1,10 +1,10 @@
 package parser
 
 import (
-	"ngxParse"
-	"ngxParse/parser/token"
 	"testing"
 
+	"github.com/starjun/ngxParse"
+	"github.com/starjun/ngxParse/parser/token"
 	"gotest.tools/v3/assert"
 )
 

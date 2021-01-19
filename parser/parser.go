@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	// "github.com/starjun/ngxParse"
-	// "github.com/starjun/ngxParse/parser/token"
-	"ngxParse"
-	"ngxParse/parser/token"
+	"github.com/starjun/ngxParse"
+	"github.com/starjun/ngxParse/parser/token"
+	// "ngxParse"
+	// "ngxParse/parser/token"
 )
 
 //Parser is an nginx config parser

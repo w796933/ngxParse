@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"ngxParse/parser/token"
+	"github.com/starjun/ngxParse/parser/token"
 
 	"gotest.tools/v3/assert"
 )
