@@ -3,9 +3,10 @@ package parser
 import (
 	"bufio"
 	"fmt"
+	"ngxParse"
 	"os"
 
-	gonginx "github.com/starjun/ngxParse"
+	"github.com/starjun/ngxParse"
 	"github.com/starjun/ngxParse/parser/token"
 	// gonginx "zjdemo/ngxParse"
 	// "zjdemo/ngxParse/parser/token"
@@ -16,9 +17,9 @@ type Parser struct {
 	lexer             *lexer
 	currentToken      token.Token
 	followingToken    token.Token
-	statementParsers  map[string]func() gonginx.IDirective
-	blockWrappers     map[string]func(*gonginx.Directive) gonginx.IDirective
-	directiveWrappers map[string]func(*gonginx.Directive) gonginx.IDirective
+	statementParsers  map[string]func() ngxParse.IDirective
+	blockWrappers     map[string]func(*ngxParse.Directive) ngxParse.IDirective
+	directiveWrappers map[string]func(*ngxParse.Directive) ngxParse.IDirective
 }
 
 //NewStringParser parses nginx conf from string
@@ -46,26 +47,26 @@ func NewParserFromLexer(lexer *lexer) *Parser {
 	parser.nextToken()
 	parser.nextToken()
 
-	parser.blockWrappers = map[string]func(*gonginx.Directive) gonginx.IDirective{
-		"http": func(directive *gonginx.Directive) gonginx.IDirective {
+	parser.blockWrappers = map[string]func(*ngxParse.Directive) ngxParse.IDirective{
+		"http": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.wrapHttp(directive)
 		},
-		"server": func(directive *gonginx.Directive) gonginx.IDirective {
+		"server": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.wrapServer(directive)
 		},
-		"location": func(directive *gonginx.Directive) gonginx.IDirective {
+		"location": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.wrapLocation(directive)
 		},
-		"upstream": func(directive *gonginx.Directive) gonginx.IDirective {
+		"upstream": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.wrapUpstream(directive)
 		},
 	}
 
-	parser.directiveWrappers = map[string]func(*gonginx.Directive) gonginx.IDirective{
-		"server": func(directive *gonginx.Directive) gonginx.IDirective {
+	parser.directiveWrappers = map[string]func(*ngxParse.Directive) ngxParse.IDirective{
+		"server": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.parseUpstreamServer(directive)
 		},
-		"include": func(directive *gonginx.Directive) gonginx.IDirective {
+		"include": func(directive *ngxParse.Directive) ngxParse.IDirective {
 			return parser.parseInclude(directive)
 		},
 	}
@@ -87,18 +88,18 @@ func (p *Parser) followingTokenIs(t token.Type) bool {
 }
 
 //Parse the gonginx.
-func (p *Parser) Parse() *gonginx.Config {
-	return &gonginx.Config{
+func (p *Parser) Parse() *ngxParse.Config {
+	return &ngxParse.Config{
 		FilePath: p.lexer.file, //TODO: set filepath here,
 		Block:    p.parseBlock(),
 	}
 }
 
 //ParseBlock parse a block statement
-func (p *Parser) parseBlock() *gonginx.Block {
+func (p *Parser) parseBlock() *ngxParse.Block {
 
-	context := &gonginx.Block{
-		Directives: make([]gonginx.IDirective, 0),
+	context := &ngxParse.Block{
+		Directives: make([]ngxParse.IDirective, 0),
 	}
 
 parsingloop:
@@ -116,8 +117,8 @@ parsingloop:
 	return context
 }
 
-func (p *Parser) parseStatement() gonginx.IDirective {
-	d := &gonginx.Directive{
+func (p *Parser) parseStatement() ngxParse.IDirective {
+	d := &ngxParse.Directive{
 		Name: p.currentToken.Literal,
 	}
 
@@ -152,8 +153,8 @@ func (p *Parser) parseStatement() gonginx.IDirective {
 }
 
 //TODO: move this into gonginx.Include
-func (p *Parser) parseInclude(directive *gonginx.Directive) *gonginx.Include {
-	include := &gonginx.Include{
+func (p *Parser) parseInclude(directive *ngxParse.Directive) *ngxParse.Include {
+	include := &ngxParse.Include{
 		Directive:   directive,
 		IncludePath: directive.Parameters[0],
 	}
@@ -170,8 +171,8 @@ func (p *Parser) parseInclude(directive *gonginx.Directive) *gonginx.Include {
 }
 
 //TODO: move this into gonginx.Location
-func (p *Parser) wrapLocation(directive *gonginx.Directive) *gonginx.Location {
-	location := &gonginx.Location{
+func (p *Parser) wrapLocation(directive *ngxParse.Directive) *ngxParse.Location {
+	location := &ngxParse.Location{
 		Modifier:  "",
 		Match:     "",
 		Directive: directive,
@@ -193,21 +194,21 @@ func (p *Parser) wrapLocation(directive *gonginx.Directive) *gonginx.Location {
 	panic("too many arguments for location directive")
 }
 
-func (p *Parser) wrapServer(directive *gonginx.Directive) *gonginx.Server {
-	s, _ := gonginx.NewServer(directive)
+func (p *Parser) wrapServer(directive *ngxParse.Directive) *ngxParse.Server {
+	s, _ := ngxParse.NewServer(directive)
 	return s
 }
 
-func (p *Parser) wrapUpstream(directive *gonginx.Directive) *gonginx.Upstream {
-	s, _ := gonginx.NewUpstream(directive)
+func (p *Parser) wrapUpstream(directive *ngxParse.Directive) *ngxParse.Upstream {
+	s, _ := ngxParse.NewUpstream(directive)
 	return s
 }
 
-func (p *Parser) wrapHttp(directive *gonginx.Directive) *gonginx.Http {
-	h, _ := gonginx.NewHttp(directive)
+func (p *Parser) wrapHttp(directive *ngxParse.Directive) *ngxParse.Http {
+	h, _ := ngxParse.NewHttp(directive)
 	return h
 }
 
-func (p *Parser) parseUpstreamServer(directive *gonginx.Directive) *gonginx.UpstreamServer {
-	return gonginx.NewUpstreamServer(directive)
+func (p *Parser) parseUpstreamServer(directive *ngxParse.Directive) *ngxParse.UpstreamServer {
+	return ngxParse.NewUpstreamServer(directive)
 }
