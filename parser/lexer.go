@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/starjun/ngxParse/parser/token"
+	"ngxParse/parser/token"
 )
 
 //lexer is the main tokenizer
