@@ -113,6 +113,8 @@ func CHJ_ngx_Parser(_str string) (mm []Upstream, ss []Server, err error) {
 						for _, vvv := range vv.Block.Directives {
 							if vvv.Name == "proxy_pass" {
 								tmp_location.Proxy_pass = vvv.Parameters[0]
+							} else if vvv.Name == "fastcgi_pass" {
+								tmp_location.Proxy_pass = vvv.Parameters[0]
 							}
 						}
 					}
